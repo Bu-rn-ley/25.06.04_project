@@ -176,3 +176,72 @@ class Schedule:
         except FileNotFoundError:
             print("파일이 존재하지 않습니다.")
     #  불러오려는데 불러올 파일이 없을때  
+
+
+def get_valid_day():
+    #요일 선택
+    while True:
+        day = input("요일 (월~금): ").strip()
+        if day in WEEKDAYS:
+            return day
+        print("올바른 요일을 입력해주세요.")
+
+
+def get_valid_time(label):
+    #시간 입력
+    while True:
+        try:
+            time = int(input(f"{label} (0~23): "))
+            if 0 <= time <= 23:
+                return time
+        except ValueError:
+            pass
+        print("올바른 시간을 입력해주세요.")
+
+
+def menu():
+    print("""
+시간표 짜기 명령어 도움말
+1. 수업 추가  2. 수업 삭제  3. 수업 수정  4. 전체 출력
+5. 요일별 보기  6. 검색  7. 저장  8. 불러오기  9. 종료
+""")
+
+
+def main():
+    schedule = Schedule()
+    menu()
+
+    while True:
+        print("\n[메뉴] 1.추가 2.삭제 3.수정 4.전체출력 5.요일별보기 6.검색 7.저장 8.불러오기 9.종료")
+        input_text = input("선택: ").strip()
+
+        if input_text == '1':
+            name = input("수업 이름: ")
+            day = get_valid_day()
+            start = get_valid_time("시작하는 시간")
+            end = get_valid_time("끝나는 시간")
+            schedule.add_course(Course(name, day, start, end))
+        elif input_text == '2':
+            schedule.delete_course(input("삭제할 수업 이름: "))
+        elif input_text == '3':
+            schedule.edit_course(input("수정할 수업 이름: "))
+        elif input_text == '4':
+            schedule.display()
+        elif input_text == '5':
+            schedule.display_day(get_valid_day())
+        elif input_text == '6':
+            schedule.search(input("검색할 수업 키워드: "))
+        elif input_text == '7':
+            schedule.save_to_file(input("저장할 파일 이름(.json 포함): ").strip())
+        elif input_text == '8':
+            schedule.load_from_file(input("불러올 파일 이름(.json 포함): ").strip())
+        elif input_text == '9':
+            print("프로그램을 종료합니다.")
+            break
+        else:
+            print("올바른 번호를 입력해주세요.")
+
+
+if __name__ == "__main__":
+    main()
+
