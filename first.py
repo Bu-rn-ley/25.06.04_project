@@ -170,7 +170,7 @@ class Schedule:
     def load_from_file(self, filename):
         try:
             with open(filename, 'r', encoding='utf-8') as f:
-                self.courses = [Course.from_dict(d) for d in json.load(f)]
+                self.courses = [course_from_dict(d) for d in json.load(f)]
             print(f"{filename}에서 시간표를 불러왔습니다.")
         # 파일에서 불러오기
         except FileNotFoundError:
